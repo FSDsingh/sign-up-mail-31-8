@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const AuthRouter = require('./Routes/AuthRouter');
 const ProductRouter = require('./Routes/ProductRouter');
+const sendEmail = require('./services/emailService'); // Import email service
 
 require('dotenv').config();
 require('./Models/db');
@@ -20,6 +21,16 @@ app.use(cors(corsOptions));
 
 // Middleware
 app.use(express.json()); // Use express's built-in JSON parser
+
+// Test email functionality (for testing purposes, remove after testing)
+app.get('/send-test-email', async (req, res) => {
+    try {
+        await sendEmail('your-email@example.com', 'Test Subject', 'Test email body');
+        res.status(200).send('Test email sent successfully');
+    } catch (error) {
+        res.status(500).send('Failed to send test email');
+    }
+});
 
 // Routes
 app.get('/ping', (req, res) => {
